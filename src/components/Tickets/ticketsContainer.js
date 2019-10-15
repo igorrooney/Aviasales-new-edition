@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Tickets from '.';
 import {
-  searchIdActionCreator,
-  getTicketsActionCreator,
-  setIsLoadingActionCreator
+  saveSearchId,
+  saveTickets,
+  setIsLoading
 } from '../../redux/tickets-reducer';
 import * as axios from 'axios';
 import Spinner from '../Spinner';
@@ -42,16 +42,13 @@ const mapStateToProps = state => {
   return { allTickets: state.store };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    saveSearchId: searchId => dispatch(searchIdActionCreator(searchId)),
-    saveTickets: (tickets, stop) =>
-      dispatch(getTicketsActionCreator(tickets, stop)),
-    setIsLoading: isLoading => dispatch(setIsLoadingActionCreator(isLoading))
-  };
-};
+// const mapDispatchToProps = dispatch => {   return {     saveSearchId:
+// searchId => dispatch(searchIdActionCreator(searchId)),     saveTickets:
+// (tickets, stop) =>       dispatch(getTicketsActionCreator(tickets, stop)),
+//  setIsLoading: isLoading => dispatch(setIsLoadingActionCreator(isLoading))
+// }; };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  { saveSearchId, saveTickets, setIsLoading }
 )(TicketsContainer);

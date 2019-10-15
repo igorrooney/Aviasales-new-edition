@@ -34,20 +34,14 @@ const ticketsReducer = (state = initialState, action) => {
   }
 };
 
-export const searchIdActionCreator = searchId => ({
-  type: SEARCH_ID,
-  searchId
-});
+export const saveSearchId = searchId => ({ type: SEARCH_ID, searchId });
 
-export const getTicketsActionCreator = (tickets, stop) => ({
+export const saveTickets = (tickets, stop) => ({
   type: SAVE_TICKETS,
   tickets,
   stop
 });
 
-export const setIsLoadingActionCreator = isLoading => ({
-  type: SET_IS_LOADING,
-  isLoading
-});
+export const setIsLoading = isLoading => ({ type: SET_IS_LOADING, isLoading });
 
 export default ticketsReducer;
