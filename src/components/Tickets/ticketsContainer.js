@@ -3,15 +3,19 @@ import { connect } from 'react-redux';
 import Tickets from '.';
 import {
   searchIdActionCreator,
-  getTicketsActionCreator
+  getTicketsActionCreator,
+  setIsLoadingActionCreator
 } from '../../redux/tickets-reducer';
 import * as axios from 'axios';
+import Spinner from '../Spinner';
 
 class TicketsContainer extends Component {
   componentDidMount() {
-    axios
-      .get('https://front-test.beta.aviasales.ru/search')
-      .then(res => this.props.saveSearchId(res.data.searchId));
+    this.props.setIsLoading(true);
+    axios.get('https://front-test.beta.aviasales.ru/search').then(res => {
+      this.props.setIsLoading(false);
+      this.props.saveSearchId(res.data.searchId);
+    });
   }
 
   render() {
@@ -20,12 +24,18 @@ class TicketsContainer extends Component {
         .get(
           `https://front-test.beta.aviasales.ru/tickets?searchId=${this.props.allTickets.searchId}`
         )
-        .then(res => this.props.saveTickets(res.data.tickets, res.data.stop));
+        .then(res => {
+          this.props.saveTickets(res.data.tickets, res.data.stop);
+        });
     }
 
     console.log(this.props.allTickets.tickets);
 
-    return <Tickets allTickets={this.props.allTickets.tickets} />;
+    return !this.props.allTickets.stop ? (
+      <Spinner />
+    ) : (
+      <Tickets allTickets={this.props.allTickets.tickets} />
+    );
   }
 }
 const mapStateToProps = state => {
@@ -36,7 +46,8 @@ const mapDispatchToProps = dispatch => {
   return {
     saveSearchId: searchId => dispatch(searchIdActionCreator(searchId)),
     saveTickets: (tickets, stop) =>
-      dispatch(getTicketsActionCreator(tickets, stop))
+      dispatch(getTicketsActionCreator(tickets, stop)),
+    setIsLoading: isLoading => dispatch(setIsLoadingActionCreator(isLoading))
   };
 };
 

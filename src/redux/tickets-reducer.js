@@ -1,10 +1,12 @@
 const SEARCH_ID = 'SEARCH_ID';
 const SAVE_TICKETS = 'GET_TICKETS';
+const SET_IS_LOADING = 'SET_IS_LOADING';
 
 const initialState = {
   tickets: [],
   searchId: '',
-  stop: false
+  stop: false,
+  isLoading: false
 };
 
 const ticketsReducer = (state = initialState, action) => {
@@ -21,6 +23,12 @@ const ticketsReducer = (state = initialState, action) => {
         tickets: [...state.tickets, ...action.tickets],
         stop: action.stop
       };
+
+    case SET_IS_LOADING:
+      return {
+        ...state,
+        isLoading: action.isLoading
+      };
     default:
       return state;
   }
@@ -35,6 +43,11 @@ export const getTicketsActionCreator = (tickets, stop) => ({
   type: SAVE_TICKETS,
   tickets,
   stop
+});
+
+export const setIsLoadingActionCreator = isLoading => ({
+  type: SET_IS_LOADING,
+  isLoading
 });
 
 export default ticketsReducer;
