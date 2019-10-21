@@ -1,6 +1,6 @@
 import React from 'react';
 
-import classes from './tickets.module.scss';
+// import classes from './tickets.module.scss';
 
 import nextId from 'react-id-generator';
 
@@ -8,8 +8,8 @@ const Tickets = props => {
   return (
     <div>
       <ol>
-        {props.allTickets.map(item => (
-          <li key={nextId()}>{item.price}</li>
+        {props.tickets.map(ticket => (
+          <li key={nextId()}>{ticket.price}</li>
         ))}
       </ol>
     </div>

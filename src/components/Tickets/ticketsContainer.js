@@ -4,51 +4,40 @@ import Tickets from '.';
 import {
   saveSearchId,
   saveTickets,
-  setIsLoading
+  setIsLoading,
+  getSearchId,
+  getTickets
 } from '../../redux/tickets-reducer';
-import * as axios from 'axios';
+
 import Spinner from '../Spinner';
 
 class TicketsContainer extends Component {
   componentDidMount() {
-    this.props.setIsLoading(true);
-    axios.get('https://front-test.beta.aviasales.ru/search').then(res => {
-      this.props.setIsLoading(false);
-      this.props.saveSearchId(res.data.searchId);
-    });
+    this.props.getSearchId();
   }
 
   render() {
-    if (!this.props.allTickets.stop && this.props.allTickets.searchId) {
-      axios
-        .get(
-          `https://front-test.beta.aviasales.ru/tickets?searchId=${this.props.allTickets.searchId}`
-        )
-        .then(res => {
-          this.props.saveTickets(res.data.tickets, res.data.stop);
-        });
+    if (!this.props.stop && this.props.searchId) {
+      this.props.getTickets(this.props.searchId);
     }
+    console.log(this.props.tickets);
 
-    console.log(this.props.allTickets.tickets);
-
-    return !this.props.allTickets.stop ? (
+    return !this.props.stop ? (
       <Spinner />
     ) : (
-      <Tickets allTickets={this.props.allTickets.tickets} />
+      <Tickets tickets={this.props.tickets} />
     );
   }
 }
 const mapStateToProps = state => {
-  return { allTickets: state.store };
+  return {
+    tickets: state.store.tickets,
+    searchId: state.store.searchId,
+    stop: state.store.stop
+  };
 };
-
-// const mapDispatchToProps = dispatch => {   return {     saveSearchId:
-// searchId => dispatch(searchIdActionCreator(searchId)),     saveTickets:
-// (tickets, stop) =>       dispatch(getTicketsActionCreator(tickets, stop)),
-//  setIsLoading: isLoading => dispatch(setIsLoadingActionCreator(isLoading))
-// }; };
 
 export default connect(
   mapStateToProps,
-  { saveSearchId, saveTickets, setIsLoading }
+  { saveSearchId, saveTickets, setIsLoading, getSearchId, getTickets }
 )(TicketsContainer);

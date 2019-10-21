@@ -1,3 +1,5 @@
+import { aviasalesAPI } from '../api/aviasales_API';
+
 const SEARCH_ID = 'SEARCH_ID';
 const SAVE_TICKETS = 'GET_TICKETS';
 const SET_IS_LOADING = 'SET_IS_LOADING';
@@ -43,5 +45,23 @@ export const saveTickets = (tickets, stop) => ({
 });
 
 export const setIsLoading = isLoading => ({ type: SET_IS_LOADING, isLoading });
+
+export const getSearchId = () => {
+  return dispatch => {
+    dispatch(setIsLoading(true));
+    aviasalesAPI
+      .getSearchId()
+      .then(data => dispatch(saveSearchId(data.searchId)));
+    dispatch(setIsLoading(false));
+  };
+};
+
+export const getTickets = searchId => {
+  return dispatch => {
+    aviasalesAPI
+      .getTickets(searchId)
+      .then(data => dispatch(saveTickets(data.tickets, data.stop)));
+  };
+};
 
 export default ticketsReducer;
